@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 interface ChuckNorrisJoke {
@@ -10,19 +10,15 @@ interface ChuckNorrisJoke {
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.css']
 })
-export class ResultsComponent implements OnInit {
+export class ResultsComponent {
   jokes: string[] = [];
 
   constructor(private http: HttpClient) { }
 
-  ngOnInit() {
-    this.getChuckNorrisJokes();
-  }
-
   getChuckNorrisJokes() {
-    const searchTerm = 'Chuck Norris'; // Término de búsqueda
+    const searchTerm = 'Chuck Norris';
     const url = `https://api.chucknorris.io/jokes/search?query=${encodeURIComponent(searchTerm)}`;
-  
+
     this.http.get<any>(url)
       .subscribe(response => {
         const jokes: ChuckNorrisJoke[] = response.result;
@@ -31,8 +27,17 @@ export class ResultsComponent implements OnInit {
       });
   }
 
-  showJokes() {
-    this.jokes = [...this.jokes];
+  ChuckJokes() {
+    const startIndex = 300;
+    const endIndex = 350;
+  
+    this.getChuckNorrisJokes();
+    this.jokes = [];
+  
+    setTimeout(() => {
+      if (this.jokes.length >= endIndex) {
+        this.jokes = this.jokes.slice(startIndex, endIndex);
+      }
+    }, 1000);
   }
 }
-
